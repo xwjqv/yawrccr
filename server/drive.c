@@ -1,6 +1,7 @@
-//#include <wiringPi.h>
+#include <wiringPi.h>
 #include <unistd.h>
-/*
+#include <stdio.h>
+
 int pinLf = 21; 
 int pinRf = 22;
 int pinLb = 23;
@@ -16,6 +17,7 @@ int init_drive()
 	pinMode(pinLb,OUTPUT);
 	pinMode(pinRb,OUTPUT);
 
+	printf("drive init complete\n");
 	return 0;
 }
 
@@ -40,6 +42,6 @@ int drive(char mode)
 			digitalWrite(pinRb,1);
 			digitalWrite(pinLb,1);
 			break; 
-	}                      
-}                              
-*/
+	}
+	return 0;
+}

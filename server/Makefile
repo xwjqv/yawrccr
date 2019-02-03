@@ -1,9 +1,9 @@
 CC=gcc
-CFLAGS= -o server -lwiringPi
+CFLAGS= -o server -lwiringPi -Wall
 
 OBJ=drive.o network.o streamer.o
 
-server : $(OBJ)
-	$(CC) $(CFLAGS) $(OBJ)
+server : server.c $(OBJ)
+	$(CC) $(CFLAGS) $(OBJ) server.c
 
 $(OBJ) : server.h

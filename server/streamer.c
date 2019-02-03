@@ -4,6 +4,8 @@
 #include <stdlib.h>
 
 pid_t streamer(struct in_addr host , uint port){
+	printf("stream starting\n");
+
 	pid_t child = fork();
 	if(child == 0){
 		char cmd[256];
@@ -15,6 +17,7 @@ pid_t streamer(struct in_addr host , uint port){
 		//execl("/bin/sh", "sh", "-c", cmd, (char *) 0);
 		system(cmd);
 		//gst-launch-1.0 udpsrc port=5000 caps="application/x-rtp" ! rtph264depay ! avdec_h264 ! videoconvert ! autovideosink sync=false
+		exit(0);
 	}
 	printf("child: %i\n", child);
 	return child;

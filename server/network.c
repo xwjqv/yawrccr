@@ -18,7 +18,7 @@
 
 #define maxsock  10
 
-struct pollfd fds[maxsock];
+static struct pollfd fds[maxsock];
 
 struct sockaddr_in clien_addr[maxsock-2];
 socklen_t client_addr_len = sizeof(clien_addr[0]);
@@ -27,7 +27,8 @@ int cmd_len[maxsock] ={0};
 char buff[256];
 int tcpcon = 0;
 
-init_network(int tcpport, int udpport){
+void init_network(int tcpport, int udpport)
+{
 
 	//udp
 	fds[0].fd = socket(AF_INET, SOCK_DGRAM, 0);
@@ -59,9 +60,12 @@ init_network(int tcpport, int udpport){
 
 	for(int i=0; i< maxsock; i++)
 		fds[i].events = POLLIN | POLLRDHUP;
+
+	printf("network init complete\n");
 }
 
-void handle_connection(struct pollfd* fds){
+void handle_connection()
+{
 	poll(fds,maxsock,0);
 
 	//udp commands
@@ -80,23 +84,25 @@ void handle_connection(struct pollfd* fds){
 					perror("accept tcp");
 				}else{
 					tcpcon++;
-					if(tcpcon==1)
+					if(tcpcon<=1)
 						streamer(clien_addr[i].sin_addr, (uint)5000);
+					printf("connected to: %s\n",inet_ntoa(clien_addr[i].sin_addr));
 				}
 			}else if(i==maxsock)
-				printf("socketlimit reached");
+				printf("socketlimit reached\n");
 		}
 	}
 			
 	//old connections
 	for(int i=2;i<maxsock;i++){
 		//errors
-		if(fds[i].revents==POLLRDHUP|POLLERR|POLLHUP){
+		if(0 != (fds[i].revents &(POLLRDHUP|POLLERR|POLLHUP))){
+			printf("connection lost to: %s\n",inet_ntoa(clien_addr[i].sin_addr));
 			close(fds[i].fd);
 			fds[i].fd = -1;
 			tcpcon--;
-			if(tcpcon==0)
-				system("killall gst-launch-1.0");
+			if(tcpcon<=0)
+				system("killall gst-launch-1.0\n");
 		}
 
 		//new input
@@ -119,4 +125,3 @@ void handle_connection(struct pollfd* fds){
 		}
 	}
 }	
-
