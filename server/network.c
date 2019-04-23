@@ -72,7 +72,10 @@ void handle_connection()
 	if(fds[0].revents==POLLIN){
 		memset(buff,0,sizeof(buff));
 		recv(fds[0].fd, buff, sizeof(buff),0 );
-		drive(buff[0]);
+		if(buff[0] == 'b' && buff[1] == 'i' && buff[2] == 'n' && buff[3] == '!') //speed and direction
+			pdrive(buff+4);
+		else
+			drive(buff[0]);
 	}
 
 	//new connection handling
