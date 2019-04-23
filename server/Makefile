@@ -3,7 +3,7 @@ CFLAGS= -Wall -lm
 
 OBJ=drive.o network.o streamer.o
 
-uname_p := $(shell uname -p)
+uname_p := $(shell uname -m)
 
 
 ifeq ($(uname_p),armv6l)
