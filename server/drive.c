@@ -26,7 +26,7 @@ int init_drive()
 	if(gpioInitialise()< 0)
 		printf("Pigpio init failed: not root or already running");
 	else
-		prihtf("initilised Pigpio");
+		printf("initilised Pigpio");
 	
 #elif defined WIRING
 	if(geteuid()==0)
@@ -54,7 +54,7 @@ int pdrive(void *pac)
 
 	int slow = (int)(speed * cos(2*M_PI* (float)direction/(float)(1<<14) )); //slow wheel while turning
 	
-#if defined PIGIO
+#if defined PIGPIO
 	if(direction > 0){//left
 		gpioHardwarePWM(pinLb, freq, slow>0 ? 1000000-abs(slow) : abs(slow));
 		gpioWrite(pinLf, slow > 0 ? 1 : 0);
@@ -69,6 +69,8 @@ int pdrive(void *pac)
 		gpioWrite(pinLf, speed > 0 ? 1 : 0);
 	}
 #endif
+
+	return 0;
 }
 	
 
