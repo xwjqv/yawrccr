@@ -21,9 +21,9 @@ struct bot *conBot(char *hostc)
 		printf("host not obtainable\n");
 		return NULL;
 	}
+	printf("%x",*(host->h_addr_list[0]));
 	struct in_addr addr;
-	addr.s_addr = *(host->h_addr_list[0]);
-	free(host);
+	addr = *(struct in_addr*)(host->h_addr_list[0]);
 
 	printf("got host\n");
 
@@ -37,7 +37,7 @@ struct bot *conBot(char *hostc)
 	bots[botCount]->tcp = socket(AF_INET, SOCK_STREAM, 0);
 	struct sockaddr_in tcpaddr;
 	tcpaddr.sin_family = AF_INET;
-	tcpaddr.sin_port = 8554;
+	tcpaddr.sin_port = htons(8554);
 	tcpaddr.sin_addr = addr;
 	if(connect(bots[botCount]->tcp,(const struct sockaddr*)&tcpaddr,sizeof(tcpaddr)))
 		perror("conBot tcp");
@@ -45,7 +45,7 @@ struct bot *conBot(char *hostc)
 	bots[botCount]->udp = socket(AF_INET, SOCK_DGRAM, 0);
 	struct sockaddr_in udpaddr;
 	udpaddr.sin_family = AF_INET;
-	udpaddr.sin_port = 8555;
+	udpaddr.sin_port = htons(8555);
 	udpaddr.sin_addr = addr;
 	if(connect(bots[botCount]->udp,(const struct sockaddr*)&udpaddr,sizeof(udpaddr)))
 		perror("conBot udp");
