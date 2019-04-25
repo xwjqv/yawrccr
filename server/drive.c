@@ -24,9 +24,9 @@ int init_drive()
 {
 #if defined PIGPIO
 	if(gpioInitialise()< 0)
-		printf("Pigpio init failed: not root or already running");
+		printf("Pigpio init failed: not root or already running\n");
 	else
-		printf("initilised Pigpio");
+		printf("initilised Pigpio\n");
 	
 #elif defined WIRING
 	if(geteuid()==0)
@@ -48,11 +48,13 @@ int pdrive(void *pac)
 {	
 	struct packet *move = pac;
 	
-	int speed = (int)le16toh(move->speed) << 5;
+	int speed = ((int)le16toh(move->speed) << 5) -1000;
 	int direction = le16toh(move->direction);
+
+	printf("speed: %d\ndirection: %d\n", speed, direction);
 	
 
-	int slow = (int)(speed * cos(2*M_PI* (float)direction/(float)(1<<14) )); //slow wheel while turning
+	int slow = (int)(speed * cos(2*M_PI* (float)direction/(float)(1<<16) ) ); //slow wheel while turning
 	
 #if defined PIGPIO
 	if(direction > 0){//left
@@ -69,7 +71,7 @@ int pdrive(void *pac)
 		gpioWrite(pinLf, speed > 0 ? 1 : 0);
 	}
 #endif
-
+	printf("pdrive\n");
 	return 0;
 }
 	

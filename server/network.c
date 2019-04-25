@@ -66,7 +66,8 @@ void init_network(int tcpport, int udpport)
 
 void handle_connection()
 {
-	poll(fds,maxsock,0);
+	printf("start polling\n");
+	poll(fds,maxsock,-1);
 
 	//udp commands
 	if(fds[0].revents==POLLIN){
@@ -76,6 +77,7 @@ void handle_connection()
 			pdrive(buff+4);
 		else
 			drive(buff[0]);
+		printf("udp input\n");
 	}
 
 	//new connection handling
@@ -90,12 +92,13 @@ void handle_connection()
 					if(tcpcon<=1)
 						streamer(clien_addr[i].sin_addr, (uint)5000);
 					printf("connected to: %s\n",inet_ntoa(clien_addr[i].sin_addr));
+					break;
 				}
 			}else if(i==maxsock)
 				printf("socketlimit reached\n");
 		}
 	}
-			
+
 	//old connections
 	for(int i=2;i<maxsock;i++){
 		//errors
