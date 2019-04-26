@@ -13,7 +13,7 @@ int main(void)
 	system("xset r off");
 
 	pthread_t tid;
-	pthread_create(&tid, 0 ,botTick, conBot("192.168.178.66"));
+	pthread_create(&tid, 0 ,botTick, conBot("raspberrypi"));
 	printf("thread created");
 
 	key();

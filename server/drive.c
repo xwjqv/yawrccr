@@ -13,8 +13,8 @@
 
 #include "../packet/packet.h"
 
-int pinLf = 5; 
-int pinRf = 6;
+int pinLf = 20; 
+int pinRf = 21;
 int pinLb = 13;
 int pinRb = 12; 
 
