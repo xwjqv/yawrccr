@@ -32,7 +32,7 @@ struct bot *conBot(char *hostc)
 	else
 		bots = realloc(bots, (botCount+1) * sizeof(*bots));
 
-	bots[botCount] = malloc(sizeof(struct bot));
+	bots[botCount] = calloc(1,sizeof(struct bot));
 
 	bots[botCount]->tcp = socket(AF_INET, SOCK_STREAM, 0);
 	struct sockaddr_in tcpaddr;
