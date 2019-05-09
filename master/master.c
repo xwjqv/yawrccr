@@ -7,17 +7,21 @@
 #include "network.h"
 
 
-int main(void)
+int main(int argc, char *argv[])
 {
 
-	system("xset r off");
 
 	pthread_t tid;
-	pthread_create(&tid, 0 ,botTick, conBot("raspberrypi"));
-	printf("thread created");
+	if(argc < 2){
+		pthread_create(&tid, 0, botTick, conBot("raspberrypi"));
+	}else{
+		for(int i=1; i<argc; i++){
+			pthread_create(&tid, 0, botTick, conBot(argv[i]));
+		}
+	}
 
+	system("xset r off");
 	key();
-
 	system("xset r on");
 
 }	
