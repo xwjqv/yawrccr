@@ -13,7 +13,7 @@ int key()
 
 	unsigned int mods = 0;
 	
-	KeySym keys[6] = {XK_W, XK_S, XK_A, XK_D, XK_space, XK_Escape};
+	KeySym keys[10] = {XK_W, XK_S, XK_A, XK_D, XK_Up, XK_Down, XK_Left, XK_Right, XK_space, XK_Escape};
 
 	for(int i=0; i < sizeof(keys)/sizeof(*keys) ; i++){
 		int key = XKeysymToKeycode(dpy,keys[i]);
@@ -42,6 +42,22 @@ int key()
 				break;
 			case XK_d:
 				bots[0]->steer = ev.type == KeyPress ? -10 : 0;
+				break;
+			case XK_Up:
+				if(bots[1]!=NULL)
+					bots[1]->accelerate = ev.type == KeyPress ? 10 : 0;
+				break;
+			case XK_Down:
+				if(bots[1]!=NULL)
+					bots[1]->accelerate = ev.type == KeyPress ? -10 : 0;
+				break;
+			case XK_Left:
+				if(bots[1]!=NULL)
+					bots[1]->steer = ev.type == KeyPress ? 10 : 0;
+				break;
+			case XK_Right:
+				if(bots[1]!=NULL)
+					bots[1]->steer = ev.type == KeyPress ? -10 : 0;
 				break;
 			case XK_space:
 				bots[0]->speed = 0;
