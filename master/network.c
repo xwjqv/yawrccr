@@ -50,6 +50,12 @@ struct bot *conBot(char *hostc)
 	if(connect(bots[botCount]->udp,(const struct sockaddr*)&udpaddr,sizeof(udpaddr)))
 		perror("conBot udp");
 
+	char *msg = calloc(16,sizeof(char));
+	int written = sprintf(msg,"port(%u);", 5000+botCount);
+	if(0 >send(bots[botCount]->tcp, msg, written, 0))
+		perror("sending free port number");
+	free(msg);
+
 	botCount++;
 
 	printf("connected bot\n");

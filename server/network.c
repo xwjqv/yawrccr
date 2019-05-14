@@ -2,6 +2,7 @@
 #include "drive.h"
 #include "streamer.h"
 
+#pragma GCC diagnostic ignored "-Wmultichar"
 #define _GNU_SOURCE
 
 #include <arpa/inet.h>
@@ -15,6 +16,7 @@
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdint.h>
 
 #define maxsock  10
 
@@ -89,8 +91,8 @@ void handle_connection()
 					perror("accept tcp");
 				}else{
 					tcpcon++;
-					if(tcpcon<=1)
-						streamer(clien_addr[i].sin_addr, (uint)5000);
+					//if(tcpcon<=1)
+					//	streamer(clien_addr[i].sin_addr, (uint)5000);
 					printf("connected to: %s\n",inet_ntoa(clien_addr[i].sin_addr));
 					break;
 				}
@@ -121,6 +123,10 @@ void handle_connection()
 				}else if(buff[j]==';'){
 					cmd[i][cmd_len[i]]=buff[j];
 					//interpretcmd();
+					//start stream with received port number
+					if((int32_t)buff[0]=='port' && buff[4]=='(')
+						streamer(clien_addr[i].sin_addr, atoi(buff+5));
+						
 					cmd_len[i]=0;
 					break;
 				}else{
