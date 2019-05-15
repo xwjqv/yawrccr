@@ -86,7 +86,7 @@ void handle_connection()
 	if(fds[1].revents==POLLIN){
 		for(int i=2;i<=maxsock;i++){
 			if(fds[i].fd==-1){
-				fds[i].fd = accept(fds[1].fd, (struct sockaddr *) &clien_addr[i], &client_addr_len);
+				fds[i].fd = accept(fds[1].fd, (struct sockaddr *) &clien_addr[i-2], &client_addr_len);
 				if(fds[i].fd < 0){
 					perror("accept tcp");
 				}else{
@@ -124,7 +124,7 @@ void handle_connection()
 					cmd[i][cmd_len[i]]=buff[j];
 					//interpretcmd();
 					//start stream with received port number
-					if((int32_t)buff[0]=='port' && buff[4]=='(')
+					if(buff[0]=='p' && buff[4]=='(')
 						streamer(clien_addr[i-2].sin_addr, atoi(buff+5));
 						
 					cmd_len[i]=0;
