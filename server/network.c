@@ -93,7 +93,7 @@ void handle_connection()
 					tcpcon++;
 					//if(tcpcon<=1)
 					//	streamer(clien_addr[i].sin_addr, (uint)5000);
-					printf("connected to: %s\n",inet_ntoa(clien_addr[i].sin_addr));
+					printf("connected to: %s\n",inet_ntoa(clien_addr[i-2].sin_addr));
 					break;
 				}
 			}else if(i==maxsock)
@@ -125,7 +125,7 @@ void handle_connection()
 					//interpretcmd();
 					//start stream with received port number
 					if((int32_t)buff[0]=='port' && buff[4]=='(')
-						streamer(clien_addr[i].sin_addr, atoi(buff+5));
+						streamer(clien_addr[i-2].sin_addr, atoi(buff+5));
 						
 					cmd_len[i]=0;
 					break;
